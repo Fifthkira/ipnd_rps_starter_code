@@ -121,16 +121,19 @@ class Game:
     def play_game(self):
         while True:
             try:
-                self.round_numbers = int(input("How many rounds do you want to play??\n"))
+                self.round_numbers = int(input("How many"
+                                               "rounds do "
+                                               "you want to play??\n"))
                 break
             except ValueError:
                 print("Value entered is not an integer")
-
+        print(f"((The game will either after {self.round_numbers} rounds"
+              f"(or who gets 3 points))")
         print("Game start!")
 # NOT ROUD 3, should maybe need a list whatever
         for round in range(self.round_numbers):
             print("--------------------------------------------")
-            print(f"Round {round}:\n")
+            print(f"Round {round+1}:\n")
             self.play_round()
 # CHECK SELF.LEARN AND DO THE SAME
             if self.p1.beats(self.move1, self.move2):
@@ -147,9 +150,9 @@ class Game:
             else:
                 print("It is a tie\n")
             if self.human_wins > self.robot_wins:
-                self.winner = self.human_wins
+                self.winner = self.p1.name
             elif self.robot_wins > self.human_wins:
-                self.winner = self.robot_wins
+                self.winner = self.p2.name
             else:
                 self.winner = 0
 # self.p1 beats self.p2.
@@ -158,7 +161,6 @@ class Game:
         print("Game over!\n")
         print(f"{self.p1.name} scored {self.human_wins}\t"
               f"||\t {self.p2.name} scored {self.robot_wins} \n")
-        
         if self.winner == 0:
             print("It is s tie")
         else:
