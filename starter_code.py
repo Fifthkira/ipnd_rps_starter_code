@@ -3,7 +3,10 @@
 #   #1 done
 #   #2 Done\
 #   #3 DONE 
-
+#   #4 DONE
+#   #5 Reflect part done
+#   #5 DONE
+#   #6 
 
 
 import string
@@ -12,16 +15,15 @@ import random
 and reports both Player's scores each round."""
 
 moves = ['rock', 'paper', 'scissors']
-
+count = 0
 """The Player class is the parent class for all of the Players
 in this game"""
-
-
 class Player:
     
     def __init__(self, name):
         self.name = name
-
+        self.my_move = None
+        self.their_move = None
     def move(self):
         #must ask user for the move and return it
         #HERE WHY WE WEILL IMPORT TWO
@@ -30,11 +32,8 @@ class Player:
         return 'rock'
 
     def learn(self, my_move, their_move):
-        # We will use this bcz we will need a comupter subclass
-        #It will use this to determine its next move
-        #
-        pass
-
+        self.my_move = my_move
+        self.their_move = their_move
 
     def beats(self, one, two):
     #This shouldnt change at all
@@ -43,9 +42,39 @@ class Player:
             (one == 'paper' and two == 'rock'))
 
 #------------------------------------------------------------------------
+# ------ First class is for the Robot------------------------------
 class RandomPlayer (Player) :
     def move(self):
         return random.choice(moves)
+
+#---------Second class is for the Robot----------------------------
+class ReflectPlayer (Player) :
+
+    def move(self):
+        
+        now_move = self.their_move
+        if now_move == None:
+            now_move = random.choice(moves)
+            return now_move
+        else:
+            return now_move  
+
+#---------- Third class is for the Robot-----------------------------
+class CyclePlayer (Player):
+    def move(self): 
+        last_move = self.my_move
+        if last_move == None:
+            last_move = random.choice(moves)
+            return last_move
+        index = moves.index(last_move)
+        if index == (len(moves)-1):
+            index = 0
+            return moves[index]
+        else:
+            new_move = moves[index+1]
+            return new_move
+
+#-----------------------------------------------------------------------
 #-----------------------------------------------------------------------
 class HumanPlayer (Player):
     def move(self):
@@ -65,6 +94,7 @@ class Game:
         #This one too
         self.p1 = p1
         self.p2 = p2
+        #self.count = None
 
     def play_round(self):
         move1 = self.p1.move()
@@ -74,8 +104,8 @@ class Game:
         #To keep score of second player
         self.move2 = move2
         #Print players
-
         print(f" \n-->> {self.p1.name}: {move1} ||  {self.p2.name}: {move2}\n")
+        
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
 
@@ -101,5 +131,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(HumanPlayer("Human"), RandomPlayer("Robot"))
+    game = Game(HumanPlayer("Human"), CyclePlayer("Robot"))
     game.play_game()
