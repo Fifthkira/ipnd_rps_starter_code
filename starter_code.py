@@ -16,7 +16,7 @@ import random
 and reports both Player's scores each round."""
 
 moves = ['rock', 'paper', 'scissors']
-types = ['random', 'reflect', 'cycle']
+types = ['random', 'reflect', 'cycle', 'rock']
 count = 0
 """The Player class is the parent class for all of the Players
 in this game"""
@@ -119,9 +119,16 @@ class Game:
         self.p2.learn(move2, move1)
 
     def play_game(self):
+        while True:
+            try:
+                self.round_numbers = int(input("How many rounds do you want to play??\n"))
+                break
+            except ValueError:
+                print("Value entered is not an integer")
+
         print("Game start!")
 # NOT ROUD 3, should maybe need a list whatever
-        while True:
+        for round in range(self.round_numbers):
             print("--------------------------------------------")
             print(f"Round {round}:\n")
             self.play_round()
@@ -130,32 +137,39 @@ class Game:
                 print(f"!! Player {self.p1.name} Won !! \n")
                 self.human_wins += 1
                 if self.human_wins == 3:
-                    self.winner = self.p1.name
                     break
 
             elif self.p2.beats(self.move2, self.move1):
                 print(f"Player {self.p2.name} Won \n")
                 self.robot_wins += 1
                 if self.robot_wins == 3:
-                    self.winner = self.p2.name
                     break
             else:
                 print("It is a tie\n")
-
+            if self.human_wins > self.robot_wins:
+                self.winner = self.human_wins
+            elif self.robot_wins > self.human_wins:
+                self.winner = self.robot_wins
+            else:
+                self.winner = 0
 # self.p1 beats self.p2.
         print("--------------------------------------------\n")
         print("--------------------------------------------\n")
         print("Game over!\n")
         print(f"{self.p1.name} scored {self.human_wins}\t"
               f"||\t {self.p2.name} scored {self.robot_wins} \n")
-        print(f"*****Congratz {self.winner}*****\n")
+        
+        if self.winner == 0:
+            print("It is s tie")
+        else:
+            print(f"*****Congratz {self.winner}*****\n")
 
 
 if __name__ == '__main__':
-    types = ['random', 'reflect', 'cycle']
+    types = ['random', 'reflect', 'cycle', 'rock']
     while True:
         game_type = input("What type of game mode? random,"
-                          "reflect or cycle?\n")
+                          " reflect, cycle or rock?\n")
         if game_type == types[0].lower():
             game = Game(HumanPlayer("Human"), RandomPlayer("Random-Robot"))
             game.play_game()
@@ -168,6 +182,10 @@ if __name__ == '__main__':
 
         elif game_type == types[2].lower():
             game = Game(HumanPlayer("Human"), CyclePlayer("Cycle-Robot"))
+            game.play_game()
+            break
+        elif game_type == types[3].lower():
+            game = Game(HumanPlayer("Human"), Player("Rock-Only-Robot"))
             game.play_game()
             break
         else:
