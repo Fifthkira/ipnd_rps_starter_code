@@ -16,6 +16,7 @@ import random
 and reports both Player's scores each round."""
 
 moves = ['rock', 'paper', 'scissors']
+types = ['random', 'reflect','cycle']
 count = 0
 """The Player class is the parent class for all of the Players
 in this game"""
@@ -147,5 +148,22 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(HumanPlayer("Human"), CyclePlayer("Robot"))
-    game.play_game()
+    types = ['random', 'reflect','cycle']
+    while True:
+        game_type = input("What type of game mode? random, reflect or cycle?\n")
+        if game_type == types[0].lower():
+            game = Game(HumanPlayer("Human"), RandomPlayer("Random-Robot"))
+            game.play_game()
+            break
+
+        elif game_type == types[1].lower():
+            game = Game(HumanPlayer("Human"), ReflectPlayer("Reflect-Robot"))
+            game.play_game()
+            break
+
+        elif game_type == types[2].lower():
+            game = Game(HumanPlayer("Human"), CyclePlayer("Cycle-Robot"))
+            game.play_game()
+            break
+        else:
+            print("You entered wrong robot name\n")
