@@ -6,7 +6,8 @@
 #   #4 DONE
 #   #5 Reflect part done
 #   #5 DONE
-#   #6 
+#   #6 Already done and typos solved
+#   #7 Done
 
 
 import string
@@ -94,7 +95,10 @@ class Game:
         #This one too
         self.p1 = p1
         self.p2 = p2
-        #self.count = None
+        self.round_numbers = 0
+        self.human_wins = 0
+        self.robot_wins = 0
+        self.winner = None
 
     def play_round(self):
         move1 = self.p1.move()
@@ -113,21 +117,33 @@ class Game:
     def play_game(self):
         print("Game start!")
         #NOT ROUD 3, should maybe need a list whatever
-        for round in range(3):
+        while True:
             print("--------------------------------------------")
             print(f"Round {round}:\n")
             self.play_round()
             #CHECK SELF.LEARN AND DO THE SAME
             if self.p1.beats(self.move1, self.move2):
                 print(f"!! Player {self.p1.name} Won !! \n")
+                self.human_wins += 1
+                if self.human_wins == 3:
+                    self.winner = self.p1.name
+                    break
 
             elif self.p2.beats(self.move2, self.move1):
                 print(f"Player {self.p2.name} Won \n")
+                self.robot_wins += 1
+                if self.robot_wins ==3:
+                    self.winner = self.p2.name
+                    break
             else:
                 print("It is a tie\n")
 
 # self.p1 beats self.p2.
-        print("Game over!")
+        print("---------------------------------------------------\n")
+        print("---------------------------------------------------\n")
+        print("Game over!\n")
+        print(f"{self.p1.name} scored {self.human_wins}\t ||\t {self.p2.name} scored {self.robot_wins} \n")
+        print(f"*****Congratz {self.winner}*****\n")
 
 
 if __name__ == '__main__':
